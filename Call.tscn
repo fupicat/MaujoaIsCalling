@@ -1,0 +1,169 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://ARIAL.TTF" type="DynamicFontData" id=1]
+[ext_resource path="res://accept.png" type="Texture" id=2]
+[ext_resource path="res://decline.png" type="Texture" id=3]
+[ext_resource path="res://emptyphone.png" type="Texture" id=4]
+[ext_resource path="res://maujoapic.png" type="Texture" id=5]
+[ext_resource path="res://Call.gd" type="Script" id=6]
+[ext_resource path="res://sfx/Telefonizinho Tocando.ogg" type="AudioStream" id=7]
+[ext_resource path="res://maujoacreepy.png" type="Texture" id=8]
+[ext_resource path="res://Main.gd" type="Script" id=9]
+[ext_resource path="res://sfx/Scream2.wav" type="AudioStream" id=10]
+[ext_resource path="res://sfx/Boom Cloud.wav" type="AudioStream" id=11]
+[ext_resource path="res://motog.png" type="Texture" id=12]
+[ext_resource path="res://sfx/maujoaholder.wav" type="AudioStream" id=13]
+
+[sub_resource type="DynamicFont" id=1]
+size = 42
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 22
+font_data = ExtResource( 1 )
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 9 )
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Phone" type="Control" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 424.0
+margin_right = -424.0
+rect_pivot_offset = Vector2( 224, 340 )
+script = ExtResource( 6 )
+
+[node name="TextureRect" type="TextureRect" parent="UI/Phone"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -74.0
+margin_top = -122.0
+margin_right = 70.0
+margin_bottom = 176.0
+texture = ExtResource( 12 )
+expand = true
+
+[node name="Call" type="TextureRect" parent="UI/Phone"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 7
+
+[node name="Pic" type="TextureRect" parent="UI/Phone/Call"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 133.0
+margin_bottom = -177.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 7
+
+[node name="Name" type="Label" parent="UI/Phone/Call"]
+anchor_right = 1.0
+margin_left = 27.0
+margin_top = 15.0
+margin_right = -27.0
+margin_bottom = 85.0
+custom_fonts/font = SubResource( 1 )
+text = "Maujoa"
+align = 1
+valign = 2
+autowrap = true
+clip_text = true
+
+[node name="Status" type="Label" parent="UI/Phone/Call"]
+anchor_right = 1.0
+margin_left = 27.0
+margin_top = 84.0
+margin_right = -27.0
+margin_bottom = 109.0
+custom_fonts/font = SubResource( 2 )
+text = "is calling..."
+align = 1
+valign = 1
+
+[node name="Accept" type="TextureButton" parent="UI/Phone/Call"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 73.0
+margin_top = -143.0
+margin_right = 166.0
+margin_bottom = -49.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 2 )
+texture_hover = ExtResource( 2 )
+texture_disabled = ExtResource( 2 )
+texture_focused = ExtResource( 2 )
+expand = true
+stretch_mode = 4
+
+[node name="Decline" type="TextureButton" parent="UI/Phone/Call"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -160.0
+margin_top = -143.0
+margin_right = -67.0
+margin_bottom = -49.0
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 3 )
+texture_disabled = ExtResource( 3 )
+texture_focused = ExtResource( 3 )
+expand = true
+stretch_mode = 4
+
+[node name="EndCall" type="TextureButton" parent="UI/Phone/Call"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -45.0
+margin_top = -143.0
+margin_right = 51.0
+margin_bottom = -46.0
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 3 )
+texture_disabled = ExtResource( 3 )
+texture_focused = ExtResource( 3 )
+expand = true
+stretch_mode = 4
+
+[node name="SFX" type="AudioStreamPlayer" parent="UI/Phone"]
+stream = ExtResource( 7 )
+
+[node name="Speaker" type="AudioStreamPlayer" parent="UI/Phone"]
+stream = ExtResource( 13 )
+volume_db = -4.753
+pitch_scale = 0.86
+bus = "Speaker"
+
+[node name="CallTimer" type="Timer" parent="UI/Phone"]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[node name="Maujoacreepy" type="Sprite" parent="."]
+visible = false
+position = Vector2( 631.437, 375.608 )
+scale = Vector2( 6.32081, 3.03514 )
+texture = ExtResource( 8 )
+
+[node name="SFX" type="AudioStreamPlayer" parent="Maujoacreepy"]
+stream = ExtResource( 10 )
+
+[node name="SFX2" type="AudioStreamPlayer" parent="Maujoacreepy"]
+stream = ExtResource( 11 )
+
+[connection signal="pressed" from="UI/Phone/Call/Accept" to="UI/Phone" method="_on_Accept_pressed"]
+[connection signal="pressed" from="UI/Phone/Call/Decline" to="UI/Phone" method="_on_Decline_pressed"]
+[connection signal="pressed" from="UI/Phone/Call/EndCall" to="UI/Phone" method="_on_EndCall_pressed"]
+[connection signal="finished" from="UI/Phone/Speaker" to="UI/Phone" method="_on_Speaker_finished"]
+[connection signal="timeout" from="UI/Phone/CallTimer" to="UI/Phone" method="_on_CallTimer_timeout"]
